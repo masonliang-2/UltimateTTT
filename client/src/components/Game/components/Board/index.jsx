@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Cell } from "../cell";
+import { Cell } from "./components/cell";
 import line1 from "./line-1.svg";
 import line2 from "./line-2.svg";
 import line3 from "./line-3.svg";

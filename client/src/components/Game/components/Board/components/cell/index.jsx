@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
-import { O } from "../O";
-import { X } from "../X";
+import { O } from "./components/O";
+import { X } from "./components/X";
 
 export const Cell = ({ value, onClick }) => {
   return (
