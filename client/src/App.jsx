@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Login } from './components/Login.jsx'
-import { Home } from './Home.jsx'
+import { Game } from './Game.jsx'
 
 function App() {
   const [username, setUsername] = useState("")
 
   return (
       username ? (
-        <Home username={username} />
+        <Game username={username} />
       ) : (
         <Login onSubmit={setUsername} />
       )

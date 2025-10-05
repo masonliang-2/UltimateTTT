@@ -6,34 +6,29 @@ import line3 from "./line-3.svg";
 import line4 from "./line-4.svg";
 import "./style.css";
 
-export const Board = () => {
-  const [cells, setCells] = useState(Array(81).fill(0));
+export const Board = ({ onCellClick }) => {
+  const [cells, setCells] = useState(
+    Array.from({ length: 9 }, () => Array(9).fill(0))
+  );
   const [player, setPlayer] = useState(1); // 1 for O, 2 for X
-  
-  const handleClick = (index) => {
-    if (cells[index] !== 0) return;
-    const newCells = [...cells];
-    newCells[index] = player;
-    setCells(newCells);
-    setPlayer(player === 1 ? 2 : 1);
+
+  const handleClick = (row,col) => {
+    onCellClick({ row,col });
   };
 
   return (
     <div className="board">
-      {Array.from({ length: 9 }).map((_, row) =>
-        <div className="board-row" key={row}>
-          {Array.from({ length: 9 }).map((_, col) => {
-            const idx = row * 9 + col;
-            return (
-              <Cell
-                key={idx}
-                value={cells[idx]}
-                onClick={() => handleClick(idx)}
-              />
-            );
-          })}
+      {cells.map((row, rowIndex) => (
+        <div className="board-row" key={rowIndex}>
+          {row.map((value, colIndex) => (
+            <Cell
+              key={`${rowIndex}-${colIndex}`}
+              value={value}
+              onClick={() => handleClick(rowIndex, colIndex)}
+            />
+          ))}
         </div>
-      )}
+      ))}
     </div>
   );
 };
