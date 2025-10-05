@@ -10,11 +10,6 @@ export const Board = ({ onCellClick }) => {
   const [cells, setCells] = useState(
     Array.from({ length: 9 }, () => Array(9).fill(0))
   );
-  const [player, setPlayer] = useState(1); // 1 for O, 2 for X
-
-  const handleClick = (row,col) => {
-    onCellClick({ row,col });
-  };
 
   return (
     <div className="board">
@@ -24,7 +19,7 @@ export const Board = ({ onCellClick }) => {
             <Cell
               key={`${rowIndex}-${colIndex}`}
               value={value}
-              onClick={() => handleClick(rowIndex, colIndex)}
+              onClick={() => onCellClick({ row: rowIndex, col: colIndex })}
             />
           ))}
         </div>

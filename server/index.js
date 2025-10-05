@@ -14,11 +14,11 @@ const handleMessage = (bytes, uuid) => {
   const message = JSON.parse(bytes.toString())
   const user = users[uuid]
   if (!user) return
-  console.log(`${user.username} Handling message`)
-  user.state = message
+  console.log(`${user.username} Handling message: ${JSON.stringify(message)}`)
+  const { row, col } = message
+  console.log(`${user.username} clicked cell at row ${row}, col ${col}`)
   broadcast()
 
-  console.log(`${user.username} updated their updated state: ${JSON.stringify(user.state)}`)
 }
 
 const handleClose = uuid => {
@@ -45,7 +45,6 @@ wsServer.on('connection', (connection, request) => {
   connections[uuid] = connection
   users[uuid] = {
     username,
-    state: { }
   }
   connection.send(JSON.stringify(users))
   connection.on('message', message => handleMessage(message, uuid));

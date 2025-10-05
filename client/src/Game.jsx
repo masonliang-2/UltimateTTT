@@ -1,5 +1,5 @@
 import useWebSocket from 'react-use-websocket';
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect , useRef } from 'react';
 import { Board } from './components/board/index.jsx';
 
 const renderUsersList = users => {
@@ -12,6 +12,7 @@ const renderUsersList = users => {
   )
 }
 
+
 export function Game({ username }) {
   const WS_URL = `ws://127.0.0.1:8000`
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(WS_URL, {
@@ -20,6 +21,9 @@ export function Game({ username }) {
     shouldReconnect: () => true,
   })
 
+  const [player, setPlayer] = useState(1); // 1 = player1, 2 = player2
+
+
   useEffect(() => {
     
   }, [])
@@ -27,24 +31,25 @@ export function Game({ username }) {
   const handleCellClick = ({ row, col }) => {
     sendJsonMessage({
       type: 'cell_click',
-      position: { row, col },
-      player: username
+      row: row,
+      col: col,
+      player: player
     });
+    setPlayer(player === 1 ? 2 : 1); // Toggle player between 1 and 2
+
   };
 
-  if (lastJsonMessage) {
-    return <>
-      {renderUsersList(lastJsonMessage)}
-      <Board onCellClick={handleCellClick} />
-    </>
-  }
-  if (!lastJsonMessage) {
-    return (
-      <main style={{ padding: 16 }}>
-        <h1>Game</h1>
-        <p>Logged in as <strong>{username}</strong>.</p>
-        <p>Something is not working...no message was sent</p>
-      </main>
-    )
-  }
+  return (
+    <main>
+      <h1>Ultimate Tic Tac Toe</h1>
+      {lastJsonMessage ? (
+        <>
+          {renderUsersList(lastJsonMessage)}
+          <Board onCellClick={handleCellClick} />
+        </>
+      ) : (
+        <p>Waiting for game state…</p>
+      )}
+    </main>
+  );
 }
