@@ -12,8 +12,9 @@ const users = {}
 
 const handleMessage = (bytes, uuid) => {
   const message = JSON.parse(bytes.toString())
-  console.log(`${username} connected`)
   const user = users[uuid]
+  if (!user) return
+  console.log(`${user.username} connected`)
   user.state = message
   broadcast()
 
