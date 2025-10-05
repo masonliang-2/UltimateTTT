@@ -47,6 +47,7 @@ wsServer.on('connection', (connection, request) => {
     username,
     state: { }
   }
+  connection.send(JSON.stringify(users))
   connection.on('message', message => handleMessage(message, uuid));
   connection.on('close', () => handleClose(uuid));
 });
