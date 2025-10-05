@@ -6,9 +6,9 @@ import line3 from "./line-3.svg";
 import line4 from "./line-4.svg";
 import "./style.css";
 
-export const Group = () => {
+export const Board = () => {
   const [cells, setCells] = useState(Array(81).fill(0));
-  const [player, setPlayer] = useState(1); // 0 for none, 1 for O, 2 for X
+  const [player, setPlayer] = useState(1); // 1 for O, 2 for X
   
   const handleClick = (index) => {
     if (cells[index] !== 0) return;
@@ -34,10 +34,6 @@ export const Group = () => {
           })}
         </div>
       )}
-      <img className="line" alt="Line" src={line1} />
-      <img className="img" alt="Line" src={line2} />
-      <img className="line-2" alt="Line" src={line3} />
-      <img className="line-3" alt="Line" src={line4} />
     </div>
   );
 };

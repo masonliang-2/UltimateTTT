@@ -1,10 +1,9 @@
 .o {
-  border: 5px solid;
-  border-color: #861111;
-  border-radius: 36px;
-  height: 72px;
-  left: 3458px;
-  position: relative;
-  top: 176px;
-  width: 72px;
+  box-sizing: border-box;
+  display: block;
+  width: 50px;               /* scale within the cell */
+  height: 50px;
+  border: 6px solid #861111;
+  border-radius: 50%;       /* responsive circle */
+  pointer-events: none;     /* clicks go to the cell button/div */
 }

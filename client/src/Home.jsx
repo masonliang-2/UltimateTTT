@@ -1,5 +1,6 @@
 import useWebSocket from 'react-use-websocket';
 import React, { useEffect, useRef } from 'react';
+import { Board } from './components/board/index.jsx';
 
 const renderUsersList = users => {
   return (
@@ -20,15 +21,13 @@ export function Home({ username }) {
   })
 
   useEffect(() => {
-    
   }, [])
 
 
   if (lastJsonMessage) {
     return <>
       {renderUsersList(lastJsonMessage)}
-      {/* ideally batch updates */}
-      {renderCursors(lastJsonMessage)}
+      <Board />
     </>
   }
   if (!lastJsonMessage) {
