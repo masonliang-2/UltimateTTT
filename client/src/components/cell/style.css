@@ -1,0 +1,11 @@
+.cell {
+  width: 100px;
+  height: 100px;
+}
+
+.cell .rectangle {
+  width: 100px;
+  height: 100px;
+  background-color: #f5f5f5;
+  border: 1px solid #000;
+}

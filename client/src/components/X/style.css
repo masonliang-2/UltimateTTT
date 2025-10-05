@@ -1,0 +1,15 @@
+.x {
+  height: 68px;
+  left: 826px;
+  position: relative;
+  top: 327px;
+  width: 64px;
+}
+
+.x .line {
+  height: 0;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 141.42%;
+}

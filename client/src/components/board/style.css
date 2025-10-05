@@ -1,0 +1,25 @@
+/* Board container: stacks rows vertically */
+.board {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin: 40px auto;
+}
+
+/* Each row: displays cells horizontally */
+.board-row {
+  display: flex;
+}
+
+/* Each cell: size and border */
+.cell {
+  width: 70px;
+  height: 70px;
+  border: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  background: #fff;
+}
