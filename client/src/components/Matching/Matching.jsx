@@ -6,10 +6,16 @@ export function Matching({ onMatch }) {
 
     return (
         <>
-        <h1>Waiting for opponent...</h1>
-           
+            <h1>Waiting for opponent...</h1>
+            <form name="backForm" onSubmit={e => {
+                e.preventDefault()
+                onMatch("", username2, gameID)
+            }}>
+                <input type="submit" value="Back"/>
+            </form>
         </>
         //onMatch={() => setUsername2("Someone")}
+        
 
     )
 }

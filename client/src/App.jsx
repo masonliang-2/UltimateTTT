@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Login } from './components/Login/Login.jsx'
 import { Game } from './components/Game/Game.jsx'
+import { Matching } from './components/Matching/Matching.jsx'
+
 
 function App() {
   const [username, setUsername] = useState("")
@@ -11,7 +13,8 @@ function App() {
     return <Game username1={username} username2={username2} gameID={gameID} />
   }
   else if (username) {
-    return <Matching onMatch={(username2, gameID) => {
+    return <Matching onMatch={(username,username2, gameID) => {
+      setUsername(username)
       setUsername2(username2)
       setGameID(gameID)
     }} />

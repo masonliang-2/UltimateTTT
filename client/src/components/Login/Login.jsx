@@ -14,7 +14,8 @@ export function Login({ onSubmit }) {
                     type="text" 
                     value={username} 
                     placeholder="username"
-                    onChange={e => setUsername(e.target.value)} />
+                    onChange={e => setUsername(e.target.value)}
+                 />
                 <input type="submit" />
             </form>
         </>
