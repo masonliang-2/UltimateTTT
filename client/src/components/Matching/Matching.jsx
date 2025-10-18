@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export function Matching({ onMatch }) {
+export function Matching({ ws, onMatch }) {
     const [username2, setUsername2] = useState('')
     const [gameID, setGameID] = useState(0)
 
@@ -9,13 +9,11 @@ export function Matching({ onMatch }) {
             <h1>Waiting for opponent...</h1>
             <form name="backForm" onSubmit={e => {
                 e.preventDefault()
-                onMatch("", username2, gameID)
+                ws.send(JSON.stringify({ type: "player_left_queue" }));
+                onMatch("", username2, gameID) 
             }}>
                 <input type="submit" value="Back"/>
             </form>
         </>
-        //onMatch={() => setUsername2("Someone")}
-        
-
     )
 }
