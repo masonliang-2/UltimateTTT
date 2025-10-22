@@ -8,6 +8,8 @@ import http from 'http';
 import { v4 as uuidv4 } from 'uuid';
 import { parse as url } from 'url';
 
+
+
 const server = http.createServer()
 const wsServer = new WebSocketServer({ server })
 
@@ -131,6 +133,7 @@ const handleMessage = (bytes, playerId) => {
 
 
 const handleClose = playerId => {
+  console.log(`(Server:) Handling close for playerId: ${playerId}`);
   /*
   console.log(`${players[playerId].name} disconnected`)
   const game = players[playerId].gameID

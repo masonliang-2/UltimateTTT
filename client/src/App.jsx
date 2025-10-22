@@ -1,7 +1,10 @@
 import { useState } from 'react'
+import useWebSocket from 'react-use-websocket';
+
 import { Login } from './components/Login/Login.jsx'
 import { Game } from './components/Game/Game.jsx'
 import { Matching } from './components/Matching/Matching.jsx'
+
 
 import { useEffect, useRef } from "react";
 
@@ -13,51 +16,63 @@ function App() {
   
   // single socket that can live across screens
   const [wsRef, setWsRef] = useState(null);
+  const [socketURL, setSocketURL] = useState(null);
 
-  // Open socket ONLY after username is set (i.e., after login)
-  useEffect(() => {
-    if (!username) return; // do nothing until they log in
+  const handleLogin = (name) => {
+    setUsername(name);
+    setSocketURL(`ws://localhost:8000?username=${encodeURIComponent(name)}`);
+  };
 
-    const ws = new WebSocket(`ws://localhost:8000?username=${username}`);
-    setWsRef(ws);
 
-    ws.onopen = () => {
+  const handleLogout = () => {
+    // Close the socket by clearing the URL
+    setSocketURL(null);
+    setUsername("");
+  };
+
+  const {sendJsonMessage,lastJsonMessage,readyState} = useWebSocket(socketURL, {
+    share: true,
+    shouldReconnect: () => true,             // auto-reconnect
+    reconnectAttempts: Infinity,
+    reconnectInterval: 1500,
+    onOpen: () => {
       console.log("Connected to server");
-      ws.send(JSON.stringify({ type: "player_join_queue" }));
-    };
+      sendJsonMessage({ type: "player_join_queue" });
+    },
+    onClose: () => console.log("WS closed"),
+    onError: (e) => console.error("WS error", e),
 
-    ws.onmessage = (event) => {
-      console.log("Received from server:", event.data);
-      //const data = JSON.parse(event.data);
-      //console.log("Received from server:", data);
-      // handle match_found etc., and call setters as needed
-      // e.g., if server sends { type: "match_found", opponent, gameID }
-      // setUsername2(data.opponent); setGameID(data.gameID);
-    };
-
-    ws.onclose = () => console.log("Disconnected from server");
-
-    // cleanup on username change or App unmount
-    return () => {
-      try { ws.close(); } catch {}
-      setWsRef(null);
-    };
-  }, [username]);
-
-
+    // Optional: handle *every* message here in one place.
+    onMessage: (event) => {
+      // This fires for ANY incoming message (string/binary).
+      // If your server sends JSON, parse it:
+      try {
+        const data = JSON.parse(event.data);
+        console.debug("WS onMessage:", data);
+        // You can do quick/urgent side effects here if you want.
+      } catch {
+        console.debug("WS onMessage (non-JSON):", event.data);
+      }
+    }
+  });
+  
 
   if (username && username2 && gameID) {
     return <Game username1={username} username2={username2} gameID={gameID} />
   }
   else if (username) {
-    return <Matching ws={wsRef} onMatch={(username,username2, gameID) => {
-      setUsername(username)
-      setUsername2(username2)
-      setGameID(gameID)
-    }} />
+    return <Matching 
+      sendJsonMessage={sendJsonMessage} 
+      lastJsonMessage={lastJsonMessage} 
+      readyState={readyState} 
+      onMatch={(username,username2, gameID) => {
+        setUsername(username)
+        setUsername2(username2)
+        setGameID(gameID)
+      }} />
   }
   else {
-    return <Login onSubmit={setUsername} />
+    return <Login onSubmit={handleLogin} />
   }
   
 }

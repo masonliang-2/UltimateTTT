@@ -2,17 +2,8 @@ import useWebSocket from 'react-use-websocket';
 import React, { useState, useEffect , useRef } from 'react';
 import { Board } from './components/Board/index.jsx';
 
-const renderUsersList = users => {
-  return (
-    <ul>
-      {Object.keys(users).map(uuid => {
-        return <li key={uuid}>{JSON.stringify(users[uuid])}</li>
-      })}
-    </ul>
-  )
-}
-
-export function Game({ username1, username2 }) {
+export function Game() {
+  /*
   const WS_URL = `ws://127.0.0.1:8000`
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(WS_URL, {
     share: true,
@@ -53,18 +44,10 @@ export function Game({ username1, username2 }) {
     });
 
   };
-
+  */
   return (
     <main>
       <h1>Ultimate Tic Tac Toe</h1>
-      {lastJsonMessage ? (
-        <>
-          {renderUsersList(lastJsonMessage)}
-          <Board onCellClick={handleCellClick} />
-        </>
-      ) : (
-        <p>Waiting for game state…</p>
-      )}
     </main>
   );
 }
