@@ -1,14 +1,23 @@
 import { useState, useEffect } from 'react'
+import { useWS } from '../../WebSocketProvider.jsx'
 
-export function Matching({ sendJsonMessage, lastJsonMessage, readyState, onMatch }) {
+export function Matching({ onMatch }) {
     const [username2, setUsername2] = useState('')
     const [gameID, setGameID] = useState(0)
+
+    const { sendJsonMessage, lastJsonMessage, readyState } = useWS();
+
+    if(sendJsonMessage){
+        console.log("sendJsonMessage is defined");
+    }
+    else{
+        console.log("sendJsonMessage is NOT defined");
+    }
 
     useEffect(() => {
         if (!lastJsonMessage) return;
 
-        // lastJsonMessage is already JSON-parsed by the hook
-        const msg = lastJsonMessage;
+        const msg = lastJsonMessage
 
         switch (msg.type) {
         case "board_state":
@@ -24,6 +33,7 @@ export function Matching({ sendJsonMessage, lastJsonMessage, readyState, onMatch
         }
         
     }, [lastJsonMessage]);
+
 
     return (
         <>

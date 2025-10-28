@@ -2,7 +2,7 @@ import useWebSocket from 'react-use-websocket';
 import React, { useState, useEffect , useRef } from 'react';
 import { Board } from './components/Board/index.jsx';
 
-export function Game() {
+export function Game({ username1, username2, gameID }) {
   /*
   const WS_URL = `ws://127.0.0.1:8000`
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(WS_URL, {
