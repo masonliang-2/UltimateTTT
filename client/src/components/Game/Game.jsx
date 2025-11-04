@@ -2,14 +2,8 @@ import useWebSocket from 'react-use-websocket';
 import React, { useState, useEffect , useRef } from 'react';
 import { Board } from './components/Board/index.jsx';
 
-export function Game({ username1, username2, gameID }) {
+export function Game({ boardState, onLogout }) {
   /*
-  const WS_URL = `ws://127.0.0.1:8000`
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(WS_URL, {
-    share: true,
-    queryParams: { username },
-    shouldReconnect: () => true,
-  })
 
   useEffect(() => {
     if (!lastJsonMessage) return;
@@ -35,6 +29,7 @@ export function Game({ username1, username2, gameID }) {
         console.warn("Unknown message:", lastJsonMessage);
     }
   }, [lastJsonMessage]); // runs every time a new message arrives
+  */
 
   const handleCellClick = ({ row, col }) => {
     sendJsonMessage({
@@ -44,10 +39,14 @@ export function Game({ username1, username2, gameID }) {
     });
 
   };
-  */
+
   return (
     <main>
       <h1>Ultimate Tic Tac Toe</h1>
+      <Board /*onCellClick={handleCellClick}*/ />
+      <p>User1: {boardState.player1_name}</p>
+      <p>User2: {boardState.player2_name}</p>
+      <button onClick={onLogout}>Quit</button>
     </main>
   );
 }

@@ -1,11 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useReducer } from 'react'
 import { useWS } from '../../WebSocketProvider.jsx'
+
+function reducer(state, action) {
+    switch (action.type) {
+        case 'GAME_FOUND':
+            return {
+                ...state,
+                phase: 'found',
+            };
+        default:
+            return state;
+    }
+}
 
 export function Matching({ onMatch }) {
     const [username2, setUsername2] = useState('')
     const [gameID, setGameID] = useState(0)
+    const [state, dispatch] = useReducer(reducer, { phase: 'idle' });             //useReducer: manages related states and complex state transitions
 
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWS();
+    const { sendJsonMessage, lastJsonMessage, readyState, subscribe, emit } = useWS();
 
     if(sendJsonMessage){
         console.log("sendJsonMessage is defined");
@@ -15,28 +28,24 @@ export function Matching({ onMatch }) {
     }
 
     useEffect(() => {
-        if (!lastJsonMessage) return;
+        const unsubscribe_game_found = subscribe('game_found', (payload) => {
+            console.log("(Client) Server game found:", payload);
+            sendJsonMessage({ type: "player_game_start" });
+            dispatch({ type: 'GAME_FOUND' });
+        });
+        const unsubscribe_game_start = subscribe('game_start', (payload) => {
+            console.log("(Client) Server game start:", payload);
+            onMatch(payload.gameID, payload.player1_name, payload.player2_name, payload.player1_or_2, payload.board, payload.turn, payload.nextBoard, payload.seq, payload.status, payload.validMoves);
+        });
+        return () => {
+            unsubscribe_game_found(); //unsub
+            unsubscribe_game_start(); //unsub
+        };
+    }, [subscribe, sendJsonMessage, onMatch]);
 
-        const msg = lastJsonMessage
-
-        switch (msg.type) {
-        case "board_state":
-            console.log("Server updated board state:", msg);
-            setUsername2(msg.player2_name);
-            setGameID(msg.gameID);
-            sendJsonMessage({ type: "player_game_found" });
-            onMatch(msg.player1_name, msg.player2_name, msg.gameID);
-            break;
-
-        default:
-            console.log("Unknown message:", msg);
-        }
-        
-    }, [lastJsonMessage]);
-
-
-    return (
-        <>
+    let screen = null;
+    if(state.phase === 'idle'){
+        screen = <>
             <h1>Waiting for opponent...</h1>
             <form name="backForm" onSubmit={e => {
                 e.preventDefault()
@@ -46,5 +55,13 @@ export function Matching({ onMatch }) {
                 <input type="submit" value="Back"/>
             </form>
         </>
-    )
+    }
+    else if(state.phase === 'found'){
+        screen = <>
+            <h1>Waiting for opponent...</h1>
+            <h4>Game Found!</h4>
+            <p>Loading...</p>
+        </>
+    }
+    return <>{screen}</>
 }
